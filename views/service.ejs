@@ -1,0 +1,326 @@
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Obtiene el parámetro "section" de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const section = urlParams.get("section");
+
+    // Mapea las secciones con los IDs de los botones y del contenido adicional
+    const sectionsMap = {
+        "services-1": { button: "btn-more-services", content: "additional-services" },
+        "services-2": { button: "btn-more-solutions", content: "additional-solutions" },
+        "services-3": { button: "btn-more-diverse", content: "additional-diverse" },
+        "services-4": { button: "btn-more-coverage", content: "additional-coverage" } // Añade más si es necesario
+    };
+
+    // Verifica si la sección está en el mapa y expande el contenido
+    if (section && sectionsMap[section]) {
+        const { button, content } = sectionsMap[section];
+        const buttonElement = document.getElementById(button);
+        const contentElement = document.getElementById(content);
+
+        // Muestra el contenido extendido, ajusta el texto del botón y hace scroll hacia la sección
+        if (contentElement && buttonElement) {
+            contentElement.style.display = "block";
+            buttonElement.textContent = "Leer menos"; // Cambia el texto a "Leer menos"
+
+            // Desplaza la vista con un margen ajustado para que el contenido quede justo en una posición agradable
+            const offset = 390; // Ajusta este valor según la altura deseada
+            const elementPosition = contentElement.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({
+                top: elementPosition - offset,
+                behavior: "smooth"
+            });
+        }
+    }
+});
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>AlphaCom</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+    <link rel="icon" href="img/Alphanew.png" type="image/x-icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Topbar Start -->
+    <div class="container-fluid bg-dark">
+        <div class="row py-2 px-lg-5">
+            <div class="col-lg-6 text-center text-lg-left mb-2 mb-lg-0">
+                <div class="d-inline-flex align-items-center text-white">
+                    <small>
+                        <i class="fa fa-phone-alt mr-2"></i>
+                        <a href="tel:+526641779293" class="text-secondary">+ 5 2 ( 6 6 4 ) 3 1 1 - 8 4 3 6</a>
+                    </small>
+                    <small class="px-3 text-secondary">|</small>
+                    <small>
+                        <i class="fa fa-envelope mr-2"></i>
+                        <a href="mailto:alphacomtj@gmail.com" class="text-secondary">alphacomtj@gmail.com</a>
+                    </small>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center text-lg-right">
+                <div class="d-inline-flex align-items-center">
+                    <a class="text-white px-2" href="https://www.facebook.com/AlphaComBC" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Topbar End -->
+
+
+    <!-- Navbar Start -->
+    <div class="container-fluid p-0">
+        <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-lg-5">
+            <a href="/" class="navbar-brand ml-lg-3">
+                <h1 class="m-0 display-5 text-uppercase text-primary">
+                <img src="img/NUEVO.png" alt="Logo" style="width: 90px; height: 80px; margin-right: 10px;">
+                    AlphaCom
+                </h1>
+            </a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
+                <div class="navbar-nav m-auto py-0">
+                    <a href="/" class="nav-item nav-link">Inicio</a>
+                    <a href="/service" class="nav-item nav-link">Nuestros servicios</a>
+                    <a href="/about" class="nav-item nav-link">Acerca de</a>
+                    <a href="/contact" class="nav-item nav-link">Contacto</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- Navbar End -->
+
+
+    <!-- Header Start -->
+    <div class="jumbotron jumbotron-fluid mb-5">
+        <div class="container text-center py-5">
+            <h1 class="text-white display-3">Servicios</h1>
+            <div class="d-inline-flex align-items-center text-white">
+                <p class="m-0"><a class="text-white" href="">Inicio</a></p>
+                <i class="fa fa-circle px-3"></i>
+                <p class="m-0">Servicios</p>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+
+   <!-- Services Start -->
+    <div class="container-fluid pt-5">
+        <div class="container">
+            <div class="text-center pb-2">
+                <h6 class="text-primary text-uppercase font-weight-bold">Servicios Que Préstamos</h6>
+                <h1 class="mb-4">Nuestras Áreas</h1>
+            </div>    
+
+            <div class="services-content">
+                <!-- Área de Servicios -->
+                <div class="services-1">
+                    <div class="d-flex align-items-center justify-content-center bg-primary mb-4 p-4">
+                        <i class="fa fa-2x fa-user-cog text-dark pr-3"></i>
+                        <h6 class="text-white font-weight-medium m-0">Área de Servicios</h6>
+                    </div>
+                    <p class="text-justify">Amplia gama de servicios tecnológicos, que incluyen el mantenimiento, reparación de equipos de cómputo e impresoras, asesoría en sistemas operativos, eliminación de virus y soluciones administrativas. También reparamos puntos de venta y terminales de mano, optimizando así tus operaciones tecnológicas.</p>
+                    <a class="border-bottom text-decoration-none" href="javascript:void(0);" id="btn-more-services">Leer más</a>
+                    <br><br>
+                    <ul class="additional-services" id="additional-services">
+                        <li>Mantenimiento de equipo de cómputo e impresoras.</li>
+                        <li>Reparación de equipo de cómputo e impresoras.</li>
+                        <li>Asesoría en sistemas operativos y aplicaciones en general.</li>
+                        <li>Detección y remoción de virus computacionales.</li>
+                        <li>Implementación de sistemas administrativos computación en acción.</li>
+                        <li>Reparación de puntos de venta, terminales de mano y escáner.</li>
+                    </ul>
+                </div>
+            
+                <!-- Área de Soluciones -->
+                <div class="services-2">
+                    <div class="d-flex align-items-center justify-content-center bg-primary mb-4 p-4">
+                        <i class="fa fa-2x fa-user-check text-dark pr-3"></i>
+                        <h6 class="text-white font-weight-medium m-0">Área de Soluciones</h6>
+                    </div>
+                    <p class="text-justify">Ofrecemos una variedad de soluciones tecnológicas, que incluyen la venta de equipos de cómputo, impresoras y accesorios, junto con consultoría para proyectos de redes LAN y WLAN. También proporcionamos soluciones de punto de venta, control de inventario, asesoría en la instalación de equipos, y pólizas de servicio para garantizar soporte constante.</p>
+                    <a class="border-bottom text-decoration-none" href="javascript:void(0);" id="btn-more-solutions">Leer más</a>
+                    <br><br>
+                    <ul class="additional-services" id="additional-solutions">
+                        <li>Venta de equipo de cómputo, impresoras, equipo de comunicación.</li>
+                        <li>Venta de accesorios periféricos y consumibles.</li>
+                        <li>Consultoría y asesoría en desarrollo de proyectos para redes LAN y WLAN.</li>
+                        <li>Consultoría y asesoría en instalación e implementación de equipos.</li>
+                        <li>Soluciones de punto de venta y control de inventario.</li>
+                        <li>Pólizas de servicio.</li>
+                    </ul>
+                </div>
+            
+                <!-- Áreas Diversas -->
+                <div class="services-3">
+                    <div class="d-flex align-items-center justify-content-center bg-primary mb-4 p-4">
+                        <i class="fa fa-2x fa-code-branch text-dark pr-3"></i>
+                        <h6 class="text-white font-weight-medium m-0">Áreas Diversas</h6>
+                    </div>
+                    <p class="text-justify">Brindamos servicios especializados en la implementación de cableado estructurado con marcas como Panduit, Beiden y Leviton, además de redes inalámbricas de diversas marcas. También nos encargamos de la instalación y configuración de conmutadores analógicos, sistemas de tierras físicas, reguladores, y cableado eléctrico para equipos y centros de cómputo.</p>
+                    <a class="border-bottom text-decoration-none" href="javascript:void(0);" id="btn-more-diverse">Leer más</a>
+                    <br><br>
+                    <ul class="additional-services" id="additional-diverse">
+                        <li>Implementación de cableado estructurado Panduit, Beiden, Leviton.</li>
+                        <li>Implementación de redes inalámbricas de diversas marcas.</li>
+                        <li>Instalación y configuración de equipos de conmutadores analógicos.</li>
+                        <li>Sistemas de tierras físicas y reguladores.</li>
+                        <li>Cableado eléctrico para equipo y centros de cómputo.</li>
+                    </ul>
+                </div>
+
+                <!-- Área de Cobertura -->
+                <div class="services-4">
+                    <div class="d-flex align-items-center justify-content-center bg-primary mb-4 p-4">
+                        <i class="fa fa-2x fa-map-marked-alt text-dark pr-3"></i>
+                        <h6 class="text-white
+                        font-weight-medium m-0">Área de Cobertura</h6>
+                    </div>
+                    <p class="text-justify">Ofrecemos servicios de soporte técnico y mantenimiento a domic
+                    ilio en Tijuana, Mexicali, San felipe, Tecate y Ensenada, con atención a empresas, oficinas, escuelas, y hogares. También proporcionamos servicios de soporte remoto y asesoría en línea para resolver problemas de software y configuración de equipos.</p>
+                    <a class="border-bottom text-decoration-none" href="javascript:void(0);" id="btn-more-coverage">Leer más</a>
+                    <br><br>
+                    <ul class="additional-services" id="additional-coverage">
+                        <li>Servicio a domicilio en Tijuana, Mexicali, San Felipe, Tecate y Ensenada.</li>
+                        <li>Atención a empresas, oficinas, escuelas y hogares.</li>
+                        <li>Servicio de soporte remoto y asesoría en línea.</li>
+                    </ul>
+                </div>
+
+            </div>  <!-- Contener de servicios "Services-content" -->
+
+        </div> <!--Contenedor que abarca todos los elementos "container" -->
+
+    </div> <!--Todo el contenedor "container-fluid"-->
+
+    <!-- Services End -->
+
+
+
+    <!-- Footer Start -->
+        <div class="container-fluid bg-dark text-white mt-5 py-5 px-sm-3 px-md-5">
+            <div class="row pt-5">
+                <div class="col-lg-7 col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 mb-5">
+                            <h3 class="text-primary mb-4">Contáctanos</h3>
+                            <p>
+                                <a href="tel:+526643118436" class="text-white">
+                                    <i class="fa fa-phone-alt mr-2"></i>+ 5 2 ( 6 6 4 ) 3 1 1 - 8 4 3 6
+                                </a>
+                            </p>
+                            <p>
+                                <a href="mailto:alphacomtj@gmail.com" class="text-white">
+                                    <i class="fa fa-envelope mr-2"></i>alphacomtj@gmail.com
+                                </a>
+                            </p>
+                            <div class="d-flex justify-content-start mt-4">
+                                <a class="btn btn-outline-light btn-social mr-2" href="https://www.facebook.com/AlphaComBC" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+                            </div>
+                        </div>
+                            <div class="col-md-6 mb-5">
+                                <h3 class="text-primary mb-4">Enlaces Rápidos</h3>
+                                    <div class="d-flex flex-column justify-content-start">
+                                        <a class="text-white mb-2" href="index.html"><i class="fa fa-angle-right mr-2"></i>Inicio</a>
+                                        <a class="text-white mb-2" href="about.html"><i class="fa fa-angle-right mr-2"></i>Acerca de</a>
+                                        <a class="text-white mb-2" href="service.html"><i class="fa fa-angle-right mr-2"></i>Nuestros Servicios</a>
+                                        <a class="text-white" href="contact.html"><i class="fa fa-angle-right mr-2"></i>Contacto</a>
+                                    </div>
+                            </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-3">
+                            <img src="img/alphacom3.png" alt="Logo AlphaCom" class="img-fluid logo-image">
+                        </div>
+                    </div>
+                </div>
+            <div class="col-lg-5 col-md-6 mb-5">
+                    <h3 class="text-primary mb-4">Nuestra Ubicación</h3>
+                    <p>P.º del Bosque 23501, Del Bosque, Villa Residencial del Bosque, 22204 Tijuana, B.C.</p>
+                    <!-- Contenedor responsivo para el iframe -->
+                    <div class="embed-responsive embed-responsive-16by9 rounded shadow">
+                        <iframe 
+                            class="embed-responsive-item" 
+                            src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d841.1845103619816!2d-116.84555607145062!3d32.50642999835432!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzLCsDMwJzIzLjIiTiAxMTbCsDUwJzQxLjciVw!5e0!3m2!1ses!2smx!4v1726034019039!5m2!1ses!2smx" 
+                            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid bg-dark text-white border-top py-4 px-sm-3 px-md-5 border-light">
+        <div class="row">
+            <div class="col-lg-6 text-center text-md-left mb-3 mb-md-0">
+                <p class="m-0 text-secondary">&copy; <a href="#">AlphaCom</a>. Todos los derechos reservados. 
+                </p>
+            </div>
+            <div class="col-lg-6 text-center text-md-right">
+                <ul class="nav d-inline-flex">
+                    <li class="nav-item">
+                        <a class="nav-link text-white py-0" href="privacy.html">Privacidad</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white py-0" href="#">Términos y condiciones</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white py-0" href="#">FAQs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white py-0" href="#">Help</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+<!-- Footer End -->
+
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/counterup/counterup.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Contact Javascript File -->
+    <script src="mail/jqBootstrapValidation.min.js"></script>
+    <script src="mail/contact.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>
