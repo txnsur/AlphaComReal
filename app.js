@@ -1,13 +1,25 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const dotenv = require('dotenv');
+const bcrypt = require('bcryptjs');
+const session = require('express-session');
+
+// Configuración de dotenv
+dotenv.config({ path: './env/.env' });
+
+// Configurar el uso de archivos estáticos desde la carpeta AlphaDashboard
+app.use('/dashboard', express.static(path.join(__dirname, 'AlphaDashboard')));
 
 // Configuración de middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// Configuración de vistas
-app.set('views', path.join(__dirname, 'views'));
+// Configura Express para buscar vistas en views y en AlphaDashboard
+app.set('views', [
+    path.join(__dirname, 'views'),        // Carpeta de vistas por defecto
+    path.join(__dirname, 'AlphaDashboard') // Carpeta de AlphaDashboard
+]);
 app.set('view engine', 'ejs');
 
 // Configuración de archivos estáticos
@@ -18,13 +30,7 @@ app.use('/lib', express.static(path.join(__dirname, 'lib')));
 app.use('/mail', express.static(path.join(__dirname, 'mail')));
 app.use('/scss', express.static(path.join(__dirname, 'scss')));
 
-// Configuración de dotenv
-const dotenv = require('dotenv');
-dotenv.config({ path: './env/.env' });
-
-// Configuración de bcryptjs y express-session
-const bcrypt = require('bcryptjs');
-const session = require('express-session');
+// Configuración de express-session
 app.use(session({
     secret: 'secret',
     resave: true,
@@ -34,125 +40,183 @@ app.use(session({
 // Conexión a la base de datos
 const connection = require('./database/db');
 
-// Ruta para la página de inicio
-app.get('/', (req, res) => {
-    if (req.session.loggedin) {
-        res.render('index', {
-            login: true,
-            name: req.session.name
-        });
-    } else {
-        res.render('index', {
-            login: false,
-            name: 'Debe iniciar sesión',
-        });
+// Middleware para no almacenar caché
+app.use((req, res, next) => {
+    if (!req.session.loggedin) {
+        res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
     }
+    next();
 });
 
-// Ruta para la página 'about'
-app.get('/about', (req, res) => {
-    res.render('about', { title: 'About Us' });
+// Middleware para verificar si el usuario está logueado
+function verificarSesion(req, res, next) {
+    if (req.session.loggedin) {
+        return next();
+    } else {
+        res.redirect('/login');
+    }
+}
+
+// Ruta para el dashboard
+app.get('/dashboard', verificarSesion, (req, res) => {
+    const userEmail = req.session.email;
+
+    // Renderiza la vista pasando userEmail
+    res.render(path.join(__dirname, 'AlphaDashboard', 'dashboard'), {
+        userEmail: userEmail,
+        name: req.session.name || 'Usuario no registrado',
+        login: req.session.loggedin || false
+    });
 });
 
-// Ruta para la página 'blog'
-app.get('/blog', (req, res) => {
-    res.render('blog', { title: 'Our Blog' });
+// Rutas dentro del dashboard (tables, etc.)
+app.get('/dashboard/tables', verificarSesion, (req, res) => {
+    res.render(path.join(__dirname, 'AlphaDashboard', 'tables'), {
+        userEmail: req.session.email || 'Correo no registrado',
+        name: req.session.name || 'Usuario no registrado',
+        login: req.session.loggedin || false
+    });
 });
 
-// Ruta para la página 'contact'
-app.get('/contact', (req, res) => {
-    res.render('contact', { title: 'Contact Us' });
+// Ruta para el 404 dentro de AlphaDashboard
+app.use('/dashboard/*', (req, res) => {
+    res.status(404).render(path.join(__dirname, 'AlphaDashboard', '404'), {
+        userEmail: req.session.email || 'Email no registrado',
+        login: req.session.loggedin || false,
+        name: req.session.name || 'Usuario no registrado'
+    });
 });
 
-// Ruta para la página 'login'
+
+// Ruta para la página de login
 app.get('/login', (req, res) => {
-    res.render('login', { title: 'Login' });
+    if (req.session.loggedin) {
+        return res.redirect('/dashboard');
+    }
+    res.render('login', { alert: false });
 });
 
-// Ruta para la página 'register'
-app.get('/register', (req, res) => {
-    res.render('register', { title: 'Register' });
-});
+// Rutas estáticas (otros formularios)
+const staticRoutes = [
+    { path: '/about', view: 'about', title: 'About Us' },
+    { path: '/contact', view: 'contact', title: 'Contact Us' },
+    { path: '/login', view: 'login', title: 'Login' },
+    { path: '/register', view: 'register', title: 'Register' },
+    { path: '/price', view: 'price', title: 'Pricing' },
+    { path: '/privacy', view: 'privacy', title: 'Privacy Policy' },
+    { path: '/service', view: 'service', title: 'Our Services' },
+    { path: '/404', view: '404', title: 'Page not Found' },
+];
 
-// Ruta para la página 'price'
-app.get('/price', (req, res) => {
-    res.render('price', { title: 'Pricing' });
-});
-
-// Ruta para la página 'privacy'
-app.get('/privacy', (req, res) => {
-    res.render('privacy', { title: 'Privacy Policy' });
-});
-
-// Ruta para la página 'service'
-app.get('/service', (req, res) => {
-    res.render('service', { title: 'Our Services' });
-});
-
-// Ruta para la página 'single'
-app.get('/single', (req, res) => {
-    res.render('single', { title: 'Single Post' });
+// Rutas estáticas para las vistas
+staticRoutes.forEach(({ path, view, title }) => {
+    app.get(path, (req, res) => res.render(view, { title }));
 });
 
 // Registro de usuario
 app.post('/register', async (req, res) => {
-    const user = req.body.user;
-    const name = req.body.name;
-    const rol = req.body.rol;
-    const pass = req.body.pass;
-    let passwordHash = await bcrypt.hash(pass, 8);
-    connection.query('INSERT INTO users SET ?', { user: user, name: name, rol: rol, pass: passwordHash }, async (error, results) => {
-        if (error) {
-            console.log(error);
-        } else {
-            res.render('register', {
-                alert: true,
-                alertTitle: "Registration",
-                alertMessage: "¡Successful Registration!",
-                alertIcon: 'success',
-                showConfirmButton: false,
-                timer: 1500,
-                ruta: ''
-            });
-        }
-    });
+    const { email, name, role, password } = req.body;
+    try {
+        const hashedPassword = await bcrypt.hash(password, 8);
+        connection.query(
+            'INSERT INTO users (email, name, role, password) VALUES (?, ?, ?, ?)',
+            [email, name, role, hashedPassword],
+            (error) => {
+                if (error) {
+                    console.error(error);
+                    res.render('register', {
+                        alert: true,
+                        alertTitle: "Error",
+                        alertMessage: "Error durante el registro.",
+                        alertIcon: 'error',
+                        showConfirmButton: true,
+                        timer: false,
+                        ruta: 'register'
+                    });
+                } else {
+                    res.render('register', {
+                        alert: true,
+                        alertTitle: "Registration",
+                        alertMessage: "¡Registro exitoso!",
+                        alertIcon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500,
+                        ruta: ''
+                    });
+                }
+            }
+        );
+    } catch (error) {
+        console.error(error);
+    }
 });
 
-// Autenticación de usuario
+// Autenticación del usuario
 app.post('/auth', async (req, res) => {
-    const user = req.body.user;
-    const pass = req.body.pass;
-    if (user && pass) {
-        connection.query('SELECT * FROM users WHERE user = ?', [user], async (error, results) => {
-            if (results.length == 0 || !(await bcrypt.compare(pass, results[0].pass))) {
-                res.render('login', {
-                    alert: true,
-                    alertTitle: "Error",
-                    alertMessage: "USUARIO y/o PASSWORD incorrectas",
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: false,
-                    ruta: 'login'
-                });
-            } else {
+    const { email, password } = req.body;
+
+    if (email && password) {
+        connection.query(
+            'SELECT * FROM user WHERE email = ?',
+            [email],
+            async (error, results) => {
+                if (error) {
+                    console.error("Error en la consulta:", error);
+                    return res.render('login', {
+                        alert: true,
+                        alertTitle: "Error",
+                        alertMessage: "Hubo un problema con el servidor. Intenta más tarde.",
+                        alertIcon: 'error',
+                        showConfirmButton: true,
+                        timer: false,
+                        ruta: 'login'
+                    });
+                }
+
+                if (results.length === 0) {
+                    return res.render('login', {
+                        alert: true,
+                        alertTitle: "Error",
+                        alertMessage: "Email no encontrado.",
+                        alertIcon: 'error',
+                        showConfirmButton: true,
+                        timer: false,
+                        ruta: 'login'
+                    });
+                }
+
+                const user = results[0];
+
+                let isMatch;
+                if (user.password && user.password.length > 60) {
+                    isMatch = await bcrypt.compare(password, user.password);
+                } else {
+                    isMatch = password === user.password;
+                }
+
+                if (!isMatch) {
+                    return res.render('login', {
+                        alert: true,
+                        alertTitle: "Error",
+                        alertMessage: "Contraseña incorrecta.",
+                        alertIcon: 'error',
+                        showConfirmButton: true,
+                        timer: false,
+                        ruta: 'login'
+                    });
+                }
                 req.session.loggedin = true;
-                req.session.name = results[0].name;
-                res.render('login', {
-                    alert: true,
-                    alertTitle: "Conexión exitosa",
-                    alertMessage: "¡LOGIN CORRECTO!",
-                    alertIcon: 'success',
-                    showConfirmButton: false,
-                    timer: 1500,
-                    ruta: ''
-                });
+                req.session.name = user.name;
+                req.session.email = user.email;
+
+                res.redirect('/dashboard');
             }
-        });
+        );
     } else {
-        res.render('login', {
+        return res.render('login', {
             alert: true,
             alertTitle: "Error",
-            alertMessage: "¡Por favor ingrese usuario y contraseña!",
+            alertMessage: "¡Por favor ingrese email y contraseña!",
             alertIcon: 'error',
             showConfirmButton: true,
             timer: false,
@@ -160,22 +224,35 @@ app.post('/auth', async (req, res) => {
         });
     }
 });
-
-// Cerrar sesión
-app.get('/logout', function (req, res) {
-    req.session.destroy(() => {
-        res.redirect('/')
-    })
+// Rutas para renderizar vistas
+app.get('/', (req, res) => {
+    res.render('index', {
+        login: req.session.loggedin || false,
+        name: req.session.name || 'Debe iniciar sesión',
+    });
 });
 
-// Middleware para no almacenar caché
-app.use(function (req, res, next) {
-    if (!req.session.loggedin)
-        res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
-    next();
+// Cerrar sesión
+app.get('/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/');
+    });
 });
 
 // Levantar el servidor
-app.listen(3000, (req, res) => {
+app.listen(3000, () => {
     console.log('SERVER RUNNING IN http://localhost:3000');
+});
+
+// Ruta general para 404 fuera del dashboard
+app.use((req, res, next) => {
+    if (!req.originalUrl.startsWith('/dashboard')) {
+        res.status(404).render('404', {
+            userEmail: req.session.email || 'Email no registrado',
+            login: req.session.loggedin || false,
+            name: req.session.name || 'Usuario no registrado'
+        });
+    } else {
+        next();
+    }
 });

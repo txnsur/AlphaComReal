@@ -5,47 +5,53 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="resources/css/style.css">
-    <title>Register</title>
+    <title>Register User</title>
 </head>
 <body>
     <div class="register-form">
-		<h1>Form Registration</h1>
-		<form action="/register" method="POST">
-            <label for="user">User</label>
-                <input type="text" name="user" required tabindex="1" autofocus>            
-            <label for="user">Full Name</label>
-                <input type="text" name="name" required tabindex="2">
-            
-            <label for="rol">Rol</label>                          
-            <select id="rol" name="rol" class="select-css" tabindex="3">
-                <option value="admin" selected>Admin</option>
-                <option value="data entry">Data Entry</option>                    
+        <h1>Register User</h1>
+        <form action="/registerUser" method="POST">
+            <!-- Campo de email -->
+            <label for="email">Email</label>
+            <input type="email" name="email" placeholder="Enter user email" required tabindex="1">
+
+            <!-- Campo de contraseña -->
+            <label for="password">Password</label>
+            <input type="password" name="password" placeholder="Enter password" required tabindex="2">
+
+            <!-- Selección de tipo de usuario -->
+            <label for="userType">User Type</label>
+            <select id="userType" name="userType" class="select-css" tabindex="3">
+                <!-- Los valores de userType son Admin o Worker, con la descripción de cada tipo -->
+                <option value="1">Admin</option>
+                <option value="2">Worker</option>
             </select>
-             <br> 
-            <label for="pass">Password</label>
-			    <input type="password" name="pass" required tabindex="4">
-            <div style="display: inline;">             
-            <a href="/" class="btn-cancel">Cancel</a><input type="submit" class="btn-save" value="Save">           
+
+            <!-- Campo oculto para registerBy que tomará el valor de la sesión -->
+            <input type="hidden" name="registerBy" value="<%= session.userId %>">
+
+            <div class="form-actions">
+                <a href="/" class="btn-cancel">Cancel</a>
+                <input type="submit" class="btn-save" value="Register">
             </div>
-		</form>		
-	</div>
+        </form>
+    </div>
 
-    		
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-<% if (typeof alert != "undefined")  { %>
- <script>
- Swal.fire({
-   title:'<%= alertTitle %>',
-   text:'<%= alertMessage %>',
-   icon:'<%= alertIcon %>',
-   showConfirmButton: <%= showConfirmButton %>,
-   timer: <%= timer %>
- }).then(()=>{
-   window.location='/<%= ruta %>'
- })
- </script>
-<% } %>
- </div>
+    <!-- Mostrar alertas dinámicas -->
+    <% if (typeof alert !== "undefined") { %>
+    <script>
+        Swal.fire({
+            title: '<%= alertTitle %>',
+            text: '<%= alertMessage %>',
+            icon: '<%= alertIcon %>',
+            showConfirmButton: <%= showConfirmButton %>,
+            timer: <%= timer %>
+        }).then(() => {
+            window.location = '/<%= ruta %>';
+        });
+    </script>
+    <% } %>
 </body>
 </html>

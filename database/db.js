@@ -1,19 +1,20 @@
-//2 - Invocamos a MySQL y realizamos la conexion
-const mysql = require('mysql');
+require('dotenv').config();
+
+const mysql = require('mysql2');
+
 const connection = mysql.createConnection({
-    //Con variables de entorno
-    host     : process.env.DB_HOST,
-    user     : process.env.DB_USER,
-    password : process.env.DB_PASS,
-    database : process.env.DB_DATABASE
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
 });
 
-connection.connect((error)=>{
-    if (error) {
-      console.error('El error de conexión es: ' + error);
-      return;
+connection.connect(err => {
+    if (err) {
+        console.error('Error connecting to the database:', err.stack);
+        return;
     }
-    console.log('¡Conectado a la Base de Datos!');
-  });
+    console.log('Connected to the database!');
+});
 
-  module.exports = connection;
+module.exports = connection;
