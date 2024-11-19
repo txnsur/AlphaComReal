@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const fs = require('fs'); // Para leer los archivos del sistema de archivos
 
 // Configuración de middleware
 app.use(express.urlencoded({ extended: false }));
@@ -49,133 +50,86 @@ app.get('/', (req, res) => {
     }
 });
 
-// Ruta para la página 'about'
-app.get('/about', (req, res) => {
-    res.render('about', { title: 'About Us' });
-});
+// Ruta para mostrar los archivos en la carpeta 'C:/uploads'
+app.get('/files', (req, res) => {
+    const uploadDir = 'C:/uploads'; // Ruta donde se encuentran los archivos en el sistema
+    const currentPath = req.query.path || ''; // Si no se pasa un parámetro, mostramos la raíz
 
-// Ruta para la página 'blog'
-app.get('/blog', (req, res) => {
-    res.render('blog', { title: 'Our Blog' });
-});
+    const fullPath = path.join(uploadDir, currentPath);
 
-// Ruta para la página 'contact'
-app.get('/contact', (req, res) => {
-    res.render('contact', { title: 'Contact Us' });
-});
+    // Verificar si la carpeta existe antes de intentar leerla
+    fs.access(fullPath, fs.constants.F_OK, (err) => {
+        if (err) {
+            return res.status(500).send('La carpeta no existe');
+        }
 
-// Ruta para la página 'login'
-app.get('/login', (req, res) => {
-    res.render('login', { title: 'Login' });
-});
+        // Leer el directorio
+        fs.readdir(fullPath, (err, files) => {
+            if (err) {
+                return res.status(500).send('No se pudo listar los archivos');
+            }
 
-// Ruta para la página 'register'
-app.get('/register', (req, res) => {
-    res.render('register', { title: 'Register' });
-});
+            // Filtrar carpetas y archivos
+            const directories = files.filter(file => fs.statSync(path.join(fullPath, file)).isDirectory());
+            const fileNames = files.filter(file => fs.statSync(path.join(fullPath, file)).isFile());
 
-// Ruta para la página 'price'
-app.get('/price', (req, res) => {
-    res.render('price', { title: 'Pricing' });
-});
+            // Calcular el path de la carpeta superior (parentPath)
+            const parentPath = currentPath ? path.dirname(currentPath) : ''; // Si hay un path actual, calculamos el path superior
 
-// Ruta para la página 'privacy'
-app.get('/privacy', (req, res) => {
-    res.render('privacy', { title: 'Privacy Policy' });
-});
-
-// Ruta para la página 'service'
-app.get('/service', (req, res) => {
-    res.render('service', { title: 'Our Services' });
-});
-
-// Ruta para la página 'single'
-app.get('/single', (req, res) => {
-    res.render('single', { title: 'Single Post' });
-});
-
-// Registro de usuario
-app.post('/register', async (req, res) => {
-    const user = req.body.user;
-    const name = req.body.name;
-    const rol = req.body.rol;
-    const pass = req.body.pass;
-    let passwordHash = await bcrypt.hash(pass, 8);
-    connection.query('INSERT INTO users SET ?', { user: user, name: name, rol: rol, pass: passwordHash }, async (error, results) => {
-        if (error) {
-            console.log(error);
-        } else {
-            res.render('register', {
-                alert: true,
-                alertTitle: "Registration",
-                alertMessage: "¡Successful Registration!",
-                alertIcon: 'success',
-                showConfirmButton: false,
-                timer: 1500,
-                ruta: ''
+            // Mostrar las carpetas y archivos en la vista
+            res.render('files', {
+                path: path, // Pasamos el módulo path a la vista
+                directories: directories,
+                files: fileNames,
+                currentPath: currentPath, // Ruta actual para que podamos navegar
+                parentPath: parentPath // Ruta para "volver atrás"
             });
+        });
+    });
+});
+
+// Ruta para descargar los archivos
+app.get('/download/:fileName', (req, res) => {
+    const fileName = req.params.fileName;
+    const filePath = path.join('C:/uploads', fileName);
+
+    // Verificar si el archivo existe
+    fs.exists(filePath, (exists) => {
+        if (exists) {
+            // Iniciar la descarga del archivo
+            res.download(filePath, (err) => {
+                if (err) {
+                    res.status(500).send('Error al descargar el archivo');
+                }
+            });
+        } else {
+            res.status(404).send('Archivo no encontrado');
         }
     });
 });
 
-// Autenticación de usuario
-app.post('/auth', async (req, res) => {
-    const user = req.body.user;
-    const pass = req.body.pass;
-    if (user && pass) {
-        connection.query('SELECT * FROM users WHERE user = ?', [user], async (error, results) => {
-            if (results.length == 0 || !(await bcrypt.compare(pass, results[0].pass))) {
-                res.render('login', {
-                    alert: true,
-                    alertTitle: "Error",
-                    alertMessage: "USUARIO y/o PASSWORD incorrectas",
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: false,
-                    ruta: 'login'
-                });
-            } else {
-                req.session.loggedin = true;
-                req.session.name = results[0].name;
-                res.render('login', {
-                    alert: true,
-                    alertTitle: "Conexión exitosa",
-                    alertMessage: "¡LOGIN CORRECTO!",
-                    alertIcon: 'success',
-                    showConfirmButton: false,
-                    timer: 1500,
-                    ruta: ''
-                });
-            }
-        });
-    } else {
-        res.render('login', {
-            alert: true,
-            alertTitle: "Error",
-            alertMessage: "¡Por favor ingrese usuario y contraseña!",
-            alertIcon: 'error',
-            showConfirmButton: true,
-            timer: false,
-            ruta: 'login'
-        });
-    }
+// Rutas para las páginas de login, register, etc. (como las tenías)
+app.get('/about', (req, res) => {
+    res.render('about', { title: 'About Us' });
 });
 
-// Cerrar sesión
-app.get('/logout', function (req, res) {
-    req.session.destroy(() => {
-        res.redirect('/')
-    })
+app.get('/blog', (req, res) => {
+    res.render('blog', { title: 'Our Blog' });
 });
 
-// Middleware para no almacenar caché
-app.use(function (req, res, next) {
-    if (!req.session.loggedin)
-        res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
-    next();
+app.get('/contact', (req, res) => {
+    res.render('contact', { title: 'Contact Us' });
+});
+
+app.get('/login', (req, res) => {
+    res.render('login', { title: 'Login' });
+});
+
+app.get('/register', (req, res) => {
+    res.render('register', { title: 'Register' });
 });
 
 // Levantar el servidor
-app.listen(3000, (req, res) => {
+app.listen(3000, () => {
     console.log('SERVER RUNNING IN http://localhost:3000');
 });

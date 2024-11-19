@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archivos</title>
+</head>
+<body>
+    <h1>Lista de Archivos y Carpetas</h1>
+
+    <% if (parentPath) { %>
+        <a href="/files?path=<%= parentPath %>">← Volver</a>
+    <% } else { %>
+        <a href="/files">← Volver</a>
+    <% } %>
+
+    <h2>Carpetas</h2>
+    <% if (directories.length > 0) { %>
+        <ul>
+            <% directories.forEach(function(directory) { %>
+                <li>
+                    <a href="/files?path=<%= path.join(currentPath, directory) %>"><%= directory %></a>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No hay carpetas disponibles</p>
+    <% } %>
+
+    <h2>Archivos</h2>
+    <% if (files.length > 0) { %>
+        <ul>
+            <% files.forEach(function(file) { %>
+                <li>
+                    <a href="/download/<%= path.join(currentPath, file) %>"><%= file %></a>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No hay archivos disponibles</p>
+    <% } %>
+
+</body>
+</html>
