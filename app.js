@@ -105,6 +105,7 @@ const staticRoutes = [
     { path: '/price', view: 'price', title: 'Pricing' },
     { path: '/privacy', view: 'privacy', title: 'Privacy Policy' },
     { path: '/service', view: 'service', title: 'Our Services' },
+    { path: '/products', view: 'products', title: 'Our Products' },
     { path: '/404', view: '404', title: 'Page not Found' },
 ];
 
