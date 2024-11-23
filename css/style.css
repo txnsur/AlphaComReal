@@ -867,11 +867,6 @@ pre code {
 .offset-11 {
   margin-left: 91.66667%;
 }
-@media (max-width: 399px) {
-  .custom-footer-row {
-    flex-direction: column !important;
-  }
-}
 
 @media (min-width: 399px) {
   .m-sm-0 {
@@ -10135,5 +10130,329 @@ p,
 }
 
 
+@media (max-width: 399px) {
+  .row {
+      display: flex;
+      flex-direction: column; /* Mueve el texto sobre la imagen */
+  }
+
+  .col-lg-5 {
+      order: 2; /* Asegura que la imagen esté debajo del texto en pantallas pequeñas */
+      width: 100%;
+  }
+
+  .col-lg-7 {
+      order: 1; /* Mueve el texto arriba de la imagen */
+      width: 100%;
+  }
+
+  /* .bg-primary {
+      position: sticky;
+      top: -15px; /* Ajusta el posicionamiento del fondo si es necesario 
+  } */
+
+  /* Opcionalmente, para mover el texto a la izquierda, en lugar de centrado */
+  .col-lg-7 h6, .col-lg-7 h1, .col-lg-7 p {
+      text-align: left;
+  }
+
+  .bg-dark {
+    padding: 10px 0; /* Reducir padding general */
+  }
+
+  .container-fluid .row {
+      flex-direction: column; /* Cambiar disposición a columna */
+      padding-left: inherit;
+  }
+
+  .container-fluid .row .col-lg-6 {
+      margin-bottom: 10px; /* Espaciado entre las columnas */
+  }
+
+  .container-fluid .d-inline-flex {
+      flex-direction: column; /* Alinear elementos en columna */
+      gap: 8px; /* Separación entre elementos */
+  }
+
+  .container-fluid .text-secondary {
+      font-size: 14px; /* Reducir tamaño de texto */
+  }
+
+  .container-fluid a {
+      font-size: 16px; /* Ajustar tamaño de enlaces */
+  }
+
+  .container-fluid i {
+      font-size: 18px; /* Ajustar tamaño de íconos */
+      margin-right: 5px; /* Espaciado entre íconos y texto */
+  }
+
+  .container-fluid .text-lg-right,
+  .container-fluid .text-lg-left {
+      text-align: center !important; /* Ignorar clases lg para centrar texto */
+  }
+}
+
+@media (max-width: 500px) {
+  .row {
+      display: flex;
+      flex-direction: column; /* Mueve el texto sobre la imagen */
+  }
+
+  .col-lg-5 {
+      order: 2; /* Asegura que la imagen esté debajo del texto en pantallas pequeñas */
+      width: 100%;
+  }
+
+  .col-lg-7 {
+      order: 1; /* Mueve el texto arriba de la imagen */
+      width: 100%;
+  }
+
+  /* .bg-primary {
+      position: sticky;
+      top: -15px; /* Ajusta el posicionamiento del fondo si es necesario 
+  } */
+
+  /* Opcionalmente, para mover el texto a la izquierda, en lugar de centrado */
+  .col-lg-7 h6, .col-lg-7 h1, .col-lg-7 p {
+      text-align: left;
+  }
+}
+
+
+@media (max-width: 600px) {
+  .row {
+      display: flex;
+      flex-direction: column; /* Mueve el texto sobre la imagen */
+  }
+
+  .col-lg-5 {
+      order: 2; /* Asegura que la imagen esté debajo del texto en pantallas pequeñas */
+      width: 100%;
+  }
+
+  .col-lg-7 {
+      order: 1; /* Mueve el texto arriba de la imagen */
+      width: 100%;
+  }
+
+  /* .bg-primary {
+      position: sticky;
+      top: -15px; /* Ajusta el posicionamiento del fondo si es necesario 
+  } */
+
+  /* Opcionalmente, para mover el texto a la izquierda, en lugar de centrado */
+  .col-lg-7 h6, .col-lg-7 h1, .col-lg-7 p {
+      text-align: left;
+  }
+}
+
+@media (max-width: 430px) {
+  .row {
+      display: flex;
+      flex-direction: column; /* Mueve el texto sobre la imagen */
+  }
+
+  .col-lg-5 {
+      order: 2; /* Asegura que la imagen esté debajo del texto en pantallas pequeñas */
+      width: 100%;
+  }
+
+  .col-lg-7 {
+      order: 1; /* Mueve el texto arriba de la imagen */
+      width: 100%;
+  }
+
+  /* .bg-primary {
+      position: sticky;
+      top: -15px; /* Ajusta el posicionamiento del fondo si es necesario 
+  } */
+
+  /* Opcionalmente, para mover el texto a la izquierda, en lugar de centrado */
+  .col-lg-7 h6, .col-lg-7 h1, .col-lg-7 p {
+      text-align: left;
+  }
+
+  .bg-dark {
+    padding: 10px 0; /* Reducir padding general */
+  }
+
+  .container-fluid .row {
+      flex-direction: column; /* Cambiar disposición a columna */
+  }
+
+  .container-fluid .row .col-lg-6 {
+      margin-bottom: 10px; /* Espaciado entre las columnas */
+  }
+
+  .container-fluid .d-inline-flex {
+      flex-direction: column; /* Alinear elementos en columna */
+      gap: 8px; /* Separación entre elementos */
+  }
+
+  .container-fluid .text-secondary {
+      font-size: 14px; /* Reducir tamaño de texto */
+  }
+
+  .container-fluid a {
+      font-size: 16px; /* Ajustar tamaño de enlaces */
+  }
+
+  .container-fluid i {
+      font-size: 18px; /* Ajustar tamaño de íconos */
+      margin-right: 5px; /* Espaciado entre íconos y texto */
+  }
+
+  .container-fluid .text-lg-right,
+  .container-fluid .text-lg-left {
+      text-align: center !important; /* Ignorar clases lg para centrar texto */
+  }
+}
+
+@media (max-width: 398px) {
+  .row {
+      display: flex;
+      flex-direction: column; /* Mueve el texto sobre la imagen */
+  }
+
+  .col-lg-5 {
+      order: 2; /* Asegura que la imagen esté debajo del texto en pantallas pequeñas */
+      width: 100%;
+  }
+
+  .col-lg-7 {
+      order: 1; /* Mueve el texto arriba de la imagen */
+      width: 100%;
+  }
+
+  /* Opcionalmente, para mover el texto a la izquierda, en lugar de centrado */
+  .col-lg-7 h6, .col-lg-7 h1, .col-lg-7 p {
+      text-align: left;
+  }
+
+  .bg-dark {
+    padding: 10px 0; /* Reducir padding general */
+  }
+
+  .container-fluid .row {
+      flex-direction: column; /* Cambiar disposición a columna */
+      padding-left: inherit;
+  }
+
+  .container-fluid .row .col-lg-6 {
+      margin-bottom: 10px; /* Espaciado entre las columnas */
+  }
+
+  .container-fluid .d-inline-flex {
+      flex-direction: column; /* Alinear elementos en columna */
+      gap: 8px; /* Separación entre elementos */
+  }
+
+  .container-fluid .text-secondary {
+      font-size: 14px; /* Reducir tamaño de texto */
+  }
+
+  .container-fluid a {
+      font-size: 16px; /* Ajustar tamaño de enlaces */
+  }
+
+  .container-fluid i {
+      font-size: 18px; /* Ajustar tamaño de íconos */
+      margin-right: 5px; /* Espaciado entre íconos y texto */
+  }
+
+  .container-fluid .text-lg-right,
+  .container-fluid .text-lg-left {
+      text-align: center !important; /* Ignorar clases lg para centrar texto */
+  }
+
+  .btn-social {
+    width: 36px;
+    height: 36px;
+    padding-left: 5px;
+    padding-right: 0px;
+    text-align: center;
+    border-radius: 36px;
+    padding-top: 7px;
+  }
+}
+
+
+  @media (max-width: 802px) {
+    .bg-dark {
+        padding: 15px 0; /* Ajustar padding superior e inferior */
+    }
+
+    .container-fluid .row {
+        flex-wrap: wrap; /* Permitir que las columnas se ajusten automáticamente */
+    }
+
+    .container-fluid .col-lg-6 {
+        width: 100%; /* Forzar cada columna a ocupar todo el ancho */
+        margin-bottom: 10px; /* Separación entre columnas */
+    }
+
+    .container-fluid .d-inline-flex {
+        justify-content: center; /* Centrar elementos en horizontal */
+        gap: 15px; /* Espaciado entre íconos */
+    }
+
+    .container-fluid .text-secondary {
+        font-size: 14px; /* Reducir tamaño de texto */
+    }
+
+    .container-fluid a {
+        font-size: 16px; /* Ajustar tamaño de enlaces */
+    }
+
+    .container-fluid i {
+        font-size: 18px; /* Reducir tamaño de los íconos */
+        margin-right: 5px; /* Espaciado entre ícono y texto */
+    }
+
+    .container-fluid .text-lg-right,
+    .container-fluid .text-lg-left {
+        text-align: center !important; /* Asegurar alineación centrada */
+    }
+}
+
+@media (max-width: 830px) {
+  .bg-dark {
+      padding: 15px 0; /* Ajustar padding superior e inferior */
+  }
+
+  .container-fluid .row {
+      flex-wrap: wrap; /* Permitir que las columnas se ajusten automáticamente */
+  }
+
+  .container-fluid .col-lg-6 {
+      width: 100%; /* Forzar cada columna a ocupar todo el ancho */
+      margin-bottom: 10px; /* Separación entre columnas */
+  }
+
+  .container-fluid .d-inline-flex {
+      justify-content: center; /* Centrar elementos en horizontal */
+      gap: 15px; /* Espaciado entre íconos */
+  }
+
+  .container-fluid .text-secondary {
+      font-size: 14px; /* Reducir tamaño de texto */
+  }
+
+  .container-fluid a {
+      font-size: 16px; /* Ajustar tamaño de enlaces */
+  }
+
+  .container-fluid i {
+      font-size: 18px; /* Reducir tamaño de los íconos */
+      margin-right: 5px; /* Espaciado entre ícono y texto */
+  }
+
+  .container-fluid .text-lg-right,
+  .container-fluid .text-lg-left {
+      text-align: center !important; /* Asegurar alineación centrada */
+  }
+}
 
 
