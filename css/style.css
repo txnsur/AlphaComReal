@@ -10083,3 +10083,57 @@ p,
 .additional-services, .additional-solutions, .additional-diverse {
   display: none;
 }
+
+/* Estilos para el carrusel de servicios En el INDEX */
+
+.services-horizontal {
+  display: flex; /* Hace que los elementos estén en fila */
+  justify-content: space-between; /* Alinea los elementos con espacio entre ellos */
+  gap: 20px; /* Espacio entre cada tarjeta */
+  flex-wrap: wrap; /* Permite que se ajusten cuando el espacio es reducido */
+  margin-top: 20px; /* Agrega espacio encima */
+}
+
+.service-card {
+  background-color: #fff;
+    width: 22%;
+    overflow: hidden;
+    text-align: center;
+}
+
+.service-card p {
+  text-align: justify; /* Justifica el texto */
+  margin-top: 10px; /* Espacio arriba del texto */
+  line-height: 1.5; /* Mejora la legibilidad */
+}
+
+.service-card a {
+  display: inline-block;
+  margin-top: 15px;
+  text-decoration: none;
+  color: var(--primary); /* Color azul */
+}
+
+.service-card a:hover {
+  text-decoration: underline; /* Subraya el enlace al pasar el cursor */
+}
+
+.service-card .d-flex {
+  justify-content: center; /* Centra el ícono y el texto */
+}
+
+@media (max-width: 1199px) {
+  .service-card {
+      width: 48%; /* En pantallas medianas, 2 tarjetas por fila */
+  }
+}
+
+@media (max-width: 767px) {
+  .service-card {
+      width: 100%; /* En pantallas pequeñas, una tarjeta por fila */
+  }
+}
+
+
+
+
