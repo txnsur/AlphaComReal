@@ -72,3 +72,18 @@ app.get('/', (req, res) => {
 app.listen(3000, () => {
     console.log('SERVER RUNNING IN http://localhost:3000');
 });
+
+// Configura el motor de plantillas EJS
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views')); // Cambia "views" por la carpeta donde están tus .ejs
+
+// Ruta para la redirección
+app.get('/carpeta/index', (req, res) => {
+  res.render('carpeta/index'); // Renderiza el archivo carpeta/index.ejs
+});
+
+// Puerto del servidor
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
+});
