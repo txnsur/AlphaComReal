@@ -152,6 +152,39 @@
     });
     
 
+    // Función para inicializar el carrusel
+    function initializeServicesCarousel() {
+        if ($(window).width() < 399) {
+            $(".services-carousel").addClass("owl-carousel").owlCarousel({
+                loop: true,
+                margin: 20,
+                nav: true,
+                dots: false,
+                autoplay: true,
+                autoplayTimeout: 5000,
+                navText: [
+                    "<i class='fa fa-arrow-left text-primary'></i>",
+                    "<i class='fa fa-arrow-right text-primary'></i>"
+                ],
+                responsive: {
+                    0: { items: 1 },
+                },
+            });
+        } else {
+            $(".services-carousel").trigger("destroy.owl.carousel").removeClass("owl-carousel");
+        }
+    }
+
+    // Ejecutar la función al cargar y redimensionar
+    $(document).ready(function () {
+        initializeServicesCarousel();
+        $(window).resize(function () {
+            initializeServicesCarousel();
+        });
+    });
+
+    
+
 
    
 
