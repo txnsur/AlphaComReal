@@ -47,8 +47,6 @@ app.use((req, res, next) => {
 const staticRoutes = [
     { path: '/about', view: 'about', title: 'About Us' },
     { path: '/contact', view: 'contact', title: 'Contact Us' },
-    { path: '/login', view: 'login', title: 'Login' },
-    { path: '/register', view: 'register', title: 'Register' },
     { path: '/price', view: 'price', title: 'Pricing' },
     { path: '/privacy', view: 'privacy', title: 'Privacy Policy' },
     { path: '/service', view: 'service', title: 'Our Services' },
@@ -74,3 +72,4 @@ app.get('/', (req, res) => {
 app.listen(3000, () => {
     console.log('SERVER RUNNING IN http://localhost:3000');
 });
+
