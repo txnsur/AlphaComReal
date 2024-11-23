@@ -8,8 +8,6 @@ const session = require('express-session');
 // Configuración de dotenv
 dotenv.config({ path: './env/.env' });
 
-
-// Configuración de middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
@@ -45,14 +43,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// Ruta para la página de login
-app.get('/login', (req, res) => {
-    if (req.session.loggedin) {
-        return res.redirect('/dashboard');
-    }
-    res.render('login', { alert: false });
-});
-
 // Rutas estáticas (otros formularios)
 const staticRoutes = [
     { path: '/about', view: 'about', title: 'About Us' },
@@ -62,6 +52,7 @@ const staticRoutes = [
     { path: '/price', view: 'price', title: 'Pricing' },
     { path: '/privacy', view: 'privacy', title: 'Privacy Policy' },
     { path: '/service', view: 'service', title: 'Our Services' },
+    { path: '/products', view: 'products', title: 'Our Products' },
     { path: '/404', view: '404', title: 'Page not Found' },
 ];
 
