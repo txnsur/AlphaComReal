@@ -8,17 +8,13 @@ const session = require('express-session');
 // Configuración de dotenv
 dotenv.config({ path: './env/.env' });
 
-// Configurar el uso de archivos estáticos desde la carpeta AlphaDashboard
-app.use('/dashboard', express.static(path.join(__dirname, 'AlphaDashboard')));
-
 // Configuración de middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // Configura Express para buscar vistas en views y en AlphaDashboard
 app.set('views', [
-    path.join(__dirname, 'views'),        // Carpeta de vistas por defecto
-    path.join(__dirname, 'AlphaDashboard') // Carpeta de AlphaDashboard
+    path.join(__dirname, 'views')
 ]);
 app.set('view engine', 'ejs');
 
@@ -48,53 +44,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// Middleware para verificar si el usuario está logueado
-function verificarSesion(req, res, next) {
-    if (req.session.loggedin) {
-        return next();
-    } else {
-        res.redirect('/login');
-    }
-}
-
-// Ruta para el dashboard
-app.get('/dashboard', verificarSesion, (req, res) => {
-    const userEmail = req.session.email;
-
-    // Renderiza la vista pasando userEmail
-    res.render(path.join(__dirname, 'AlphaDashboard', 'dashboard'), {
-        userEmail: userEmail,
-        name: req.session.name || 'Usuario no registrado',
-        login: req.session.loggedin || false
-    });
-});
-
-// Rutas dentro del dashboard (tables, etc.)
-app.get('/dashboard/tables', verificarSesion, (req, res) => {
-    res.render(path.join(__dirname, 'AlphaDashboard', 'tables'), {
-        userEmail: req.session.email || 'Correo no registrado',
-        name: req.session.name || 'Usuario no registrado',
-        login: req.session.loggedin || false
-    });
-});
-
-// Ruta para el 404 dentro de AlphaDashboard
-app.use('/dashboard/*', (req, res) => {
-    res.status(404).render(path.join(__dirname, 'AlphaDashboard', '404'), {
-        userEmail: req.session.email || 'Email no registrado',
-        login: req.session.loggedin || false,
-        name: req.session.name || 'Usuario no registrado'
-    });
-});
-
-
-// Ruta para la página de login
-app.get('/login', (req, res) => {
-    if (req.session.loggedin) {
-        return res.redirect('/dashboard');
-    }
-    res.render('login', { alert: false });
-});
 
 // Rutas estáticas (otros formularios)
 const staticRoutes = [
@@ -233,27 +182,8 @@ app.get('/', (req, res) => {
     });
 });
 
-// Cerrar sesión
-app.get('/logout', (req, res) => {
-    req.session.destroy(() => {
-        res.redirect('/');
-    });
-});
 
 // Levantar el servidor
 app.listen(3000, () => {
     console.log('SERVER RUNNING IN http://localhost:3000');
-});
-
-// Ruta general para 404 fuera del dashboard
-app.use((req, res, next) => {
-    if (!req.originalUrl.startsWith('/dashboard')) {
-        res.status(404).render('404', {
-            userEmail: req.session.email || 'Email no registrado',
-            login: req.session.loggedin || false,
-            name: req.session.name || 'Usuario no registrado'
-        });
-    } else {
-        next();
-    }
 });
