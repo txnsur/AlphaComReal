@@ -71,3 +71,11 @@ app.get('/', (req, res) => {
 // Levantar el servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`));
+
+app.use((req, res, next) => {
+    if (req.header('x-forwarded-proto') !== 'https') {
+        return res.redirect(`https://${req.header('host')}${req.url}`);
+    }
+    next();
+});
+
