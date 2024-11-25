@@ -1,20 +1,21 @@
 const express = require('express');
-const app = express();
 const path = require('path');
 const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
 
+// Inicialización
+const app = express();
+
 // Configuración de dotenv
 dotenv.config({ path: './env/.env' });
 
+// Configuración de middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// Configura Express para buscar vistas en views y en AlphaDashboard
-app.set('views', [
-    path.join(__dirname, 'views')
-]);
+// Configura vistas
+app.set('views', [path.join(__dirname, 'views')]);
 app.set('view engine', 'ejs');
 
 // Configuración de archivos estáticos
@@ -26,20 +27,28 @@ app.use('/mail', express.static(path.join(__dirname, 'mail')));
 app.use('/scss', express.static(path.join(__dirname, 'scss')));
 
 // Configuración de express-session
-app.use(session({
-    secret: 'secret',
-    resave: true,
-    saveUninitialized: true
-}));
+app.use(
+    session({
+        secret: 'secret',
+        resave: true,
+        saveUninitialized: true,
+    })
+);
 
 // Conexión a la base de datos
 const connection = require('./database/db');
 
-// Middleware para no almacenar caché
+// Middleware para redirigir a HTTPS
 app.use((req, res, next) => {
-    if (!req.session.loggedin) {
-        res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    if (req.header('x-forwarded-proto') !== 'https') {
+        return res.redirect(`https://${req.header('host')}${req.url}`);
     }
+    next();
+});
+
+// Middleware para evitar caché
+app.use((req, res, next) => {
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
     next();
 });
 
@@ -59,7 +68,7 @@ staticRoutes.forEach(({ path, view, title }) => {
     app.get(path, (req, res) => res.render(view, { title }));
 });
 
-// Rutas para renderizar vistas
+// Ruta principal
 app.get('/', (req, res) => {
     res.render('index', {
         login: req.session.loggedin || false,
@@ -67,15 +76,8 @@ app.get('/', (req, res) => {
     });
 });
 
-
 // Levantar el servidor
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`));
-
-app.use((req, res, next) => {
-    if (req.header('x-forwarded-proto') !== 'https') {
-        return res.redirect(`https://${req.header('host')}${req.url}`);
-    }
-    next();
-});
-
+app.listen(PORT, () =>
+    console.log(`Server running on port http://localhost:${PORT}`)
+);
